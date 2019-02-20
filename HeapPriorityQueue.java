@@ -9,7 +9,7 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     {
         if(uCapacity < 0)
         {
-        //Illegal Requested Capacity
+            throw new IllegalRequestedCapacityException("Requested capacity is less than zero!");
         }
         else
         {
@@ -35,7 +35,7 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         {
             if(array[index] == null)
             {
-            //Null Element Exception
+                throw new NullElementException("Encountered null element in inputted array!");
             }
         }
     }
