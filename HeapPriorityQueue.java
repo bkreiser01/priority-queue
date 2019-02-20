@@ -8,12 +8,13 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     
 
     //Constructors
-    public HeapPriorityQueue(E[] array, int uCapacity))
+    /*
+    public HeapPriorityQueue(E[] array, int uCapacity)
     {
-        HeapPriorityQueue(uCapacity);
-        HeapPriorityQueue(array);
+        this(uCapacity);
+        this(array);
     }
-
+    */
     public HeapPriorityQueue(int uCapacity)
     {
         if(uCapacity < 0)
@@ -22,12 +23,12 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         }
         else
         {
-            capacity = hCapacity;
-            heap = new E[capacity] + 1;
-            size = 0
+            capacity = uCapacity;
+            heap = new E[capacity + 1];
+            size = 0;
         }
     }
-    
+    /*
     public HeapPriorityQueue(E[] array)
     {
     
@@ -55,11 +56,11 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         buildHeap();
     }
 
-    //Methods
     private void buildHeap()
     {
 
     }
+
     private void heapify()
     {
         
@@ -88,4 +89,5 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     {
 
     }
+    */
 }

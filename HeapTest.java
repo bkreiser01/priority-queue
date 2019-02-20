@@ -7,6 +7,9 @@ public class HeapTest
 {
     public static void main(String[] args)
     {
+        PriorityQueue<Integer> heap = new HeapPriorityQueue<Integer>(10);
+        //EPPLEY SECTION
+        /*
         PriorityQueue<Integer> intQ = new HeapPriorityQueue<Integer>(10);
         intQ.insert(12);
         intQ.insert(4);
@@ -83,5 +86,6 @@ public class HeapTest
         
         System.out.println("\nNow, throw an empty heap exception with informative message:");
         stringQ.min();
+        */
     }
 }
