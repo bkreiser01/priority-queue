@@ -61,14 +61,16 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
 
     private void buildHeap()
     {
-        for(index = (int)(size/2); index >= 1; index--)
+        for(int index = (int)(size/2); index >= 1; index--)
             heapify(index);
     }
 
     private void heapify(int i)
     {
+        int smallest;
+
         //Find the smallest cell i, or its children.
-        if(((2*i) <= size) && (heap(2*i) < heap[i]))
+        if(((2*i) <= size) && (heap[2*i] < heap[i]))
             smallest = 2*i;
         else
             smallest = i;
@@ -106,7 +108,7 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
             
         heap[1] = heap[size - 1];
         size--;
-        heapify(heap[1]);
+        heapify(1);
     }
     
     public boolean insert(E data)
@@ -127,17 +129,17 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
 
     }
     
-    public boolean isEmpty();
+    public boolean isEmpty()
     {
         return(size == 0);
     }
     
-    public boolean isFull();
+    public boolean isFull()
     {
         return(capacity == size);
     }
     
-    public int size();
+    public int size()
     {
         return size;
     }
