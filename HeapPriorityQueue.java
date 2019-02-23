@@ -59,51 +59,85 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     }
 
 
-    private void buildHeap() //IN PROGRESS
+    private void buildHeap()
     {
-        for(i = (int)(size/2); )
+        for(index = (int)(size/2); index >= 1; index--)
+            heapify(index);
     }
 
-    private void heapify(E element) //IN PROGRESS
+    private void heapify(int i)
     {
+        //Find the smallest cell i, or its children.
+        if(((2*i) <= size) && (heap(2*i) < heap[i]))
+            smallest = 2*i;
+        else
+            smallest = i;
         
+        if((((2*i) + 1) <= size) &&(heap[2 * i] < heap[smallest]))
+            smallest = (2 * i) + 1;
+
+        //Now exchange and continue if necessary;
+        if(smallest != i)
+        {
+            exchange(i, smallest);
+            heapify(smallest);
+        }
+    }
+
+    private void exchange(int index1, int index2)
+    {
+        E temp = heap[index1];
+        heap[index1] = heap[index2];
+        heap[index2] = temp;
     }
     
     public E min()
     {
         if(isEmpty())
-            //EmptyHeapException
+            throw new EmptyHeapException("The heap is empty!");
         
         return(heap[1]);
     }
     
-    public E deleteMin() //IN PROGRESS
+    public E deleteMin()
     {
         if(isEmpty())
-            //EmptyHeapException
+            throw new EmptyHeapException("The heap is empty!");
             
         heap[1] = heap[size - 1];
         size--;
         heapify(heap[1]);
     }
     
-    public boolean insert(E data) //IN PROGRESS
+    public boolean insert(E data)
     {
         if(isFull())
-            //FullHeapException
+            throw new FullHeapException("The heap is full!");
+
+        size++;
+        int index = size;
+        heap[index] = data;
+
+        //Percolate to restore the heap property.
+        while(index > 1 && heap[index] < heap[(int)(index/2)])
+        {
+            exchange(index, (int)(index/2));
+            index = (int)(index/2);
+        }
+
     }
     
-    public boolean isEmpty(); //DONE
+    public boolean isEmpty();
     {
         return(size == 0);
     }
     
-    public boolean isFull(); //DONE
+    public boolean isFull();
     {
         return(capacity == size);
     }
     
-    public int size(); //DONE
+    public int size();
     {
         return size;
     }
