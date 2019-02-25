@@ -11,51 +11,37 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     {
         if(uCapacity < 0)
             throw new IllegalRequestedCapacityException("Requested capacity is less than zero!");
-            
+        
+        heap = (E[])(new Comparable[uCapacity + 1]);
         capacity = uCapacity;
         size = 0;
-        this(array);
-    }
-
-    public HeapPriorityQueue(int uCapacity)
-    {
-        if(uCapacity < 0)
-        {
-            throw new IllegalRequestedCapacityException("Requested capacity is less than zero!");
-        }
-        else
-        {
-            capacity = uCapacity;
-            heap = new (E[])(new Comparable[capacity + 1]);
-            size = 0;
-        }
-    }
- 
-    public HeapPriorityQueue(E[] array)
-    {
-    
-        if(capacity == null)
-        {
-            heap = (E[])(new Comparable[array.length + 1]);
-        }
-        else
-        {
-            heap = (E[])(new Comparable[capacity + 1]);
-        }
         
-        for(int index = 0; index < array.length; index++)
+        if(array != null)
         {
-            if(array[index] == null)
+            for(int index = 0; index < array.length; index++)
             {
-                throw new NullElementException("Encountered null element in inputted array!");
-            }
-            else
-            {
-              heap[index + 1] = array[index];
+                if(array[index] == null)
+                {
+                    throw new NullElementException("Encountered null element in inputted array!");
+                }
+                else
+                {
+                heap[index + 1] = array[index];
+                }
             }
         }
 
         buildHeap();
+    }
+
+    public HeapPriorityQueue(int uCapacity)
+    {
+        this(null, uCapacity);
+    }
+ 
+    public HeapPriorityQueue(E[] array)
+    {
+        this(array, 0);
     }
 
 
@@ -70,12 +56,12 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         int smallest;
 
         //Find the smallest cell i, or its children.
-        if(((2*i) <= size) && (heap[2*i] < heap[i]))
+        if(((2*i) <= size) && ((heap[2*i].compareTo(heap[i])) > 0))
             smallest = 2*i;
         else
             smallest = i;
         
-        if((((2*i) + 1) <= size) &&(heap[2 * i] < heap[smallest]))
+        if((((2*i) + 1) <= size) &&(heap[2 * i].compareTo(heap[smallest]) > 0))
             smallest = (2 * i) + 1;
 
         //Now exchange and continue if necessary;
@@ -106,9 +92,11 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         if(isEmpty())
             throw new EmptyHeapException("The heap is empty!");
             
+        E temp = heap[1];
         heap[1] = heap[size - 1];
         size--;
         heapify(1);
+        return temp;
     }
     
     public boolean insert(E data)
@@ -121,11 +109,13 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         heap[index] = data;
 
         //Percolate to restore the heap property.
-        while(index > 1 && heap[index] < heap[(int)(index/2)])
+        while(index > 1 && heap[index].compareTo(heap[(int)(index/2)]) > 0)
         {
             exchange(index, (int)(index/2));
             index = (int)(index/2);
         }
+        
+        return true;
 
     }
     
