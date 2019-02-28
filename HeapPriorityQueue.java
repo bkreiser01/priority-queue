@@ -12,12 +12,19 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         if(uCapacity < 0)
             throw new IllegalRequestedCapacityException("Requested capacity is less than zero!");
         
-        heap = (E[])(new Comparable[uCapacity + 1]);
-        capacity = uCapacity;
-        size = 0;
-        
         if(array != null)
         {
+        	size = array.length;
+        	if(uCapacity == 0)
+        	{
+        		capacity = size + 1;
+        	}
+        	else
+        		capacity = uCapacity + 1;
+        		
+        	heap = (E[])(new Comparable[capacity]);
+        	capacity--;
+        	
             for(int index = 0; index < array.length; index++)
             {
                 if(array[index] == null)
@@ -27,8 +34,15 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
                 else
                 {
                 heap[index + 1] = array[index];
+                size++;
                 }
             }
+        }
+        else
+        {
+        	heap = (E[])(new Comparable[uCapacity + 1]);
+        	capacity = uCapacity;
+        	size = 0;
         }
 
         buildHeap();
@@ -47,7 +61,7 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
 
     private void buildHeap()
     {
-        for(int index = (int)(size/2); index >= 1; index--)
+        for(int index = size/2; index >= 1; index--)
             heapify(index);
     }
 
@@ -56,12 +70,12 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         int smallest;
 
         //Find the smallest cell i, or its children.
-        if(((2*i) <= size) && ((heap[2*i].compareTo(heap[i])) > 0))
+        if(((2*i) <= size) && ((heap[2*i].compareTo(heap[i])) < 0))
             smallest = 2*i;
         else
             smallest = i;
         
-        if((((2*i) + 1) <= size) &&(heap[2 * i].compareTo(heap[smallest]) > 0))
+        if((((2*i) + 1) <= size) &&(heap[2 * i].compareTo(heap[smallest]) < 0))
             smallest = (2 * i) + 1;
 
         //Now exchange and continue if necessary;
@@ -111,8 +125,8 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         //Percolate to restore the heap property.
         while(index > 1 && heap[index].compareTo(heap[(int)(index/2)]) > 0)
         {
-            exchange(index, (int)(index/2));
-            index = (int)(index/2);
+            exchange(index, index/2);
+            index = index/2;
         }
         
         return true;
