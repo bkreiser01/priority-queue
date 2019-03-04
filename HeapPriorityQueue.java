@@ -11,20 +11,12 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     {
         if(uCapacity < 0)
             throw new IllegalRequestedCapacityException("Requested capacity is less than zero!");
+            
+        capacity = uCapacity;
+        heap = (E[])(new Comparable[uCapacity + 1]);
         
         if(array != null)
         {
-        	size = array.length;
-        	if(uCapacity == 0)
-        	{
-        		capacity = size + 1;
-        	}
-        	else
-        		capacity = uCapacity + 1;
-        		
-        	heap = (E[])(new Comparable[capacity]);
-        	capacity--;
-        	
             for(int index = 0; index < array.length; index++)
             {
                 if(array[index] == null)
@@ -33,19 +25,17 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
                 }
                 else
                 {
-                heap[index + 1] = array[index];
-                size++;
+                    heap[index + 1] = array[index];
+                    size++;
                 }
+                
+                buildHeap();
             }
         }
         else
         {
-        	heap = (E[])(new Comparable[uCapacity + 1]);
-        	capacity = uCapacity;
         	size = 0;
         }
-
-        buildHeap();
     }
 
     public HeapPriorityQueue(int uCapacity)
@@ -55,13 +45,13 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
  
     public HeapPriorityQueue(E[] array)
     {
-        this(array, 0);
+        this(array, array.length);
     }
 
 
     private void buildHeap()
     {
-        for(int index = size/2; index >= 1; index--)
+        for(int index = size/2; index > 0; index--)
             heapify(index);
     }
 
@@ -75,13 +65,15 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         else
             smallest = i;
         
-        if((((2*i) + 1) <= size) &&(heap[2 * i].compareTo(heap[smallest]) < 0))
+        if((((2*i) + 1) <= size) &&(heap[(2 * i) + 1].compareTo(heap[smallest]) < 0))
             smallest = (2 * i) + 1;
 
         //Now exchange and continue if necessary;
         if(smallest != i)
         {
-            exchange(i, smallest);
+            E temp = heap[i];
+            heap[i] = heap[smallest];
+            heap[smallest] = temp;
             heapify(smallest);
         }
     }
