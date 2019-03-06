@@ -48,7 +48,6 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         this(array, array.length);
     }
 
-
     private void buildHeap()
     {
         for(int index = size/2; index > 0; index--)
@@ -78,17 +77,10 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         }
     }
 
-    private void exchange(int index1, int index2)
-    {
-        E temp = heap[index1];
-        heap[index1] = heap[index2];
-        heap[index2] = temp;
-    }
-    
     public E min()
     {
         if(isEmpty())
-            throw new EmptyHeapException("The heap is empty!");
+            throw new EmptyHeapException("Can't get the minimum element on a empty heap!");
         
         return(heap[1]);
     }
@@ -96,29 +88,36 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     public E deleteMin()
     {
         if(isEmpty())
-            throw new EmptyHeapException("The heap is empty!");
+            throw new EmptyHeapException("Can't delete an element from an already empty heap!");
             
         E temp = heap[1];
-        heap[1] = heap[size - 1];
+        heap[1] = heap[size];
         size--;
         heapify(1);
+        
         return temp;
     }
     
     public boolean insert(E data)
     {
         if(isFull())
-            throw new FullHeapException("The heap is full!");
+            throw new FullHeapException("Can't insert an element on an already full heap!");
+        
+        if(data == null)
+        	throw new NullElementException("Can't insert a null element!");
 
         size++;
-        int index = size;
-        heap[index] = data;
-
+        int newPosition = size;
+        heap[newPosition] = data;
+		
         //Percolate to restore the heap property.
-        while(index > 1 && heap[index].compareTo(heap[(int)(index/2)]) > 0)
+        while(newPosition > 1 && heap[newPosition].compareTo(heap[newPosition/2]) < 0)
         {
-            exchange(index, index/2);
-            index = index/2;
+            E temp = heap[newPosition];
+            heap[newPosition] = heap[newPosition/2];
+            heap[newPosition/2] = temp;
+            
+            newPosition = newPosition/2;
         }
         
         return true;
