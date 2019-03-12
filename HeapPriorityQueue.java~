@@ -48,6 +48,7 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         this(array, array.length);
     }
 
+
     private void buildHeap()
     {
         for(int index = size/2; index > 0; index--)
@@ -77,10 +78,17 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
         }
     }
 
+    private void exchange(int index1, int index2)
+    {
+        E temp = heap[index1];
+        heap[index1] = heap[index2];
+        heap[index2] = temp;
+    }
+    
     public E min()
     {
         if(isEmpty())
-            throw new EmptyHeapException("Can't get the minimum element on a empty heap!");
+            throw new EmptyHeapException("The heap is empty!");
         
         return(heap[1]);
     }
@@ -88,7 +96,7 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     public E deleteMin()
     {
         if(isEmpty())
-            throw new EmptyHeapException("Can't delete an element from an already empty heap!");
+            throw new EmptyHeapException("The heap is empty!");
             
         E temp = heap[1];
         heap[1] = heap[size];
@@ -101,10 +109,7 @@ public class HeapPriorityQueue<E extends Comparable<? super E>> implements Prior
     public boolean insert(E data)
     {
         if(isFull())
-            throw new FullHeapException("Can't insert an element on an already full heap!");
-        
-        if(data == null)
-        	throw new NullElementExcpetion("Can't insert a null element!");
+            throw new FullHeapException("The heap is full!");
 
         size++;
         int newPosition = size;
